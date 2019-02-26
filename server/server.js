@@ -85,6 +85,39 @@ app.post('/image', authenticate, (req, res)=>{
 	})
 })
 
+app.patch('/image', authenticate, (req, res)=>{
+
+	// let img = req.body.title;
+	// res.send(console.log(img));
+	let img = req.body.title;
+
+	fs.stat(publicPath + './../uploads/'+img, function (err, stats) {
+   console.log(stats);//here we got all information of file in stats variable
+
+	   if (err) {
+	       return console.error(err);
+	   }
+
+	   fs.unlink(publicPath + './../uploads/'+img,function(err){
+	        if(err) return console.log(err);
+	        console.log('file deleted successfully');
+	   });  
+});
+
+
+	let id = req.user._id;
+	User.findOneAndUpdate({
+		_id: id,
+	}, {$set: {'image': ''}}, {new: true, useFindAndModify: false}).then((user)=>{
+		if(!user){
+			return res.status(404).send();
+		};
+		res.send({user});
+	}).catch((e)=>{
+		res.status(400).send();
+	});
+})
+
 
 // Sign up page
 app.get('/register', loginCheck, (req, res)=> {

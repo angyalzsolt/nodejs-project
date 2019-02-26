@@ -25,7 +25,7 @@ $.get('/profile/id', (data)=>{
 	$('#gender').val(data.gender);
 	$('#telnum').val(data.telephone);
 	$('#address').val(data.address);
-	$('#profile-pic').html(`<img src=./${data.image} style='width: 200px'>`);
+	$('#profile-pic').html(`<img src=./${data.image} style="width: 200px" onerror="this.src = '../icon.jpg';">`);
 });
 
 
@@ -48,5 +48,20 @@ $('#images').on('submit', (e)=>{
 		window.location.replace('/profile');
 	}).fail((msg)=>{
 		console.log('An error occured', msg.responseText);
+	})
+});
+
+
+$('#delete').on('click', (e)=>{
+	let img = $('#profile-pic img').attr('src').substring(2);
+	
+	$.ajax({
+		url: '/image',
+		method: 'PATCH',
+		data: {title: img}
+	}).done((msg)=>{
+		console.log('IMG deleted');
+	}).fail((msg)=>{
+		console.log('There is an error: ', msg.responseText);
 	})
 })
