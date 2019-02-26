@@ -9,6 +9,8 @@ const cookieSession = require('cookie-session');
 const path = require('path');
 
 
+const multer = require('multer');
+
 const {db} = require('./db/mongoose');
 const {User} = require('./models/user');
 const {authenticate, loginCheck} = require('./middlewares/authenticate');
@@ -24,6 +26,65 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.static(publicPath));
 app.use(cookieParser());
+
+app.use(express.static('uploads'));
+
+const storage = multer.diskStorage({
+	destination: publicPath + '/../uploads/',
+	filename: function(req, file, cb){
+		cb(null, 'img' + '-' + Date.now() + path.extname(file.originalname));
+	}
+});
+
+const upload = multer({
+	storage: storage,
+	limits:{ fileSize: 10000000},
+	fileFilter: function(req, file, cb){
+		checkFileType(file, cb);
+	}
+}).single('img');
+
+// Check File Type
+function checkFileType(file, cb){
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
+
+  if(mimetype && extname){
+    return cb(null,true);
+  } else {
+    cb('Error: Images Only!');
+  }
+}
+
+
+app.post('/image', authenticate, (req, res)=>{
+	let id = req.user._id;
+	console.log(id);
+	upload(req, res, (err)=>{
+		console.log(req.file);
+		console.log(id);
+		if(err){
+			res.status(401).send(err);
+		} else {
+			if(req.file == undefined){
+				res.status(404).send(err);
+			} else {
+				User.findOneAndUpdate({
+					_id: id,
+				}, {$set:{ 'image': req.file.filename}}, {new: true, useFindAndModify: false}).then((user)=>{
+					res.send(user)
+				}).catch((e)=>{
+					res.status(401).send(e);
+				})
+			}
+		}
+	})
+})
+
 
 // Sign up page
 app.get('/register', loginCheck, (req, res)=> {
@@ -109,32 +170,7 @@ app.patch('/profile', authenticate, (req,res)=>{
 
 });
 
-app.get('/test', authenticate, (req, res)=>{
-	let id = req.user._id;
-
-	User.findOne(id).then((user)=>{
-		if(!user){
-			return res.status(404).send();
-		};
-		console.log(user)
-		res.send({user});
-	}).catch((e)=>{
-		res.status(400).send();
-	})
-});
-
-
-app.get('/cookie',authenticate, (req, res)=>{
-   
-     req.user.removeToken(req.cookies.jwt).then(()=>{
-     	res.clearCookie('jwt');
-     	res.send('TOKEN REMOVED, BUT COOKIE STILL IN PLACE');
-     }).catch((e)=>{
-     	res.status(400).send(e);
-     })});
-
-
 
 app.listen(port, ()=> {
 	console.log(`Started on port ${port}`);
-})
+});

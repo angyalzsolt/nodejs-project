@@ -10,7 +10,6 @@ $('#infos').on('submit', (e)=>{
 	$.ajax({
 		url: '/profile',
 		method: 'PATCH',
-		enctype: 'multipart/form-data',
 		data: user
 	}).done((msg)=>{
 		console.log('ITS DONE');
@@ -26,4 +25,28 @@ $.get('/profile/id', (data)=>{
 	$('#gender').val(data.gender);
 	$('#telnum').val(data.telephone);
 	$('#address').val(data.address);
+	$('#profile-pic').html(`<img src=./${data.image} style='width: 200px'>`);
+});
+
+
+$('#images').on('submit', (e)=>{
+	e.preventDefault();
+	let formData = new FormData()
+	formData.append('img', $('#img')[0].files[0]);
+	console.log($('#img')[0].files[0]);
+	for(let x of formData.entries()){
+		console.log(x[0] + ', ' + x[1]);
+	}
+	$.ajax({
+		url: '/image',
+		method: 'POST',
+		data: formData,
+		enctype	: 'multipart/form-data',
+		processData: false,
+		contentType: false
+	}).done((msg)=>{
+		window.location.replace('/profile');
+	}).fail((msg)=>{
+		console.log('An error occured', msg.responseText);
+	})
 })

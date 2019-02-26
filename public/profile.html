@@ -7,9 +7,12 @@
 <body>
 	<h1>Profile</h1>
 	<h2>This is your profile</h2>
+	<div id="profile-pic" style="width: 200px, height: 250px">
+		
+	</div>
 	<hr>
 	<h3>Please add more information</h3>
-	<form id="infos" method="post" enctype="multipart/form-data">
+	<form id="infos">
 		<label>Hello: </label>
 		<div id="user-name"></div>
 		<label>Email: </label>
@@ -26,11 +29,13 @@
 		<label>Address</label>
 		<input id="address" type="text" name="address">
 		<br>
-		<label>Profile Picture</label>
-		<input type="file" name="avatar">
 		<button>Add more infos</button>
 	</form>
-
+	
+    <form id="images" method="POST" action="/image" enctype="multipart/form-data">
+      <input type="file" name="img" id="img">
+      <input type="submit" value="Upload">
+    </form> 
 
 
 	<script type="text/javascript" src="/js/libs/jquery-3.3.1.min.js"></script>
