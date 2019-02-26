@@ -10,8 +10,7 @@ $('#login').on('submit', (e)=>{
 		method: 'POST',
 		data: user
 	}).done((msg)=>{
-		// window.location.replace('/home.html?success');
-		console.log(123);
+		window.location.replace('/home');
 	}).fail((msg)=>{
 		console.log('Error:', msg.responseText);
 	});

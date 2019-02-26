@@ -23,6 +23,18 @@ let UserSchema = new mongoose.Schema({
 		required: true,
 		minlength: 6
 	},
+	gender:{
+		type: String
+	},
+	telephone: {
+		type: String
+	},
+	address: {
+		type: String
+	},
+	image: {
+		type: String
+	},
 	tokens: [{
 		access: {
 			type: String,

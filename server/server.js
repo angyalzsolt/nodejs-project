@@ -19,8 +19,6 @@ const publicPath = path.join(__dirname + '/../public');
 const port = process.env.PORT || 3000;
 const app = express();
 
-
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -64,18 +62,65 @@ app.post('/login', (req, res)=>{
 
 
 // Home page, test for only authorized visitors
-app.get('/home',authenticate, (req, res)=> {
-
+app.get('/home', authenticate, (req, res)=> {
 	res.sendFile(publicPath+'/home.html');
 })
 
-app.post('/home', (req, res)=>{
-	res.send('THIS IS MY HOME');
+
+app.delete('/home', authenticate, (req, res)=>{
+	req.user.removeToken(req.cookies.jwt).then(()=>{
+     	res.clearCookie('jwt');
+     	res.send('TOKEN REMOVED, BUT COOKIE STILL IN PLACE');
+     }).catch((e)=>{
+     	res.status(400).send(e);
+     })});
+
+
+app.get('/profile', authenticate, (req, res)=> {
+	res.sendFile(publicPath+'/profile.html');
+})
+
+app.get('/profile/id', authenticate, (req, res)=>{
+	let id = req.user._id;
+	User.findOne(id).then((user)=>{
+		res.send(user);
+	}).catch((e)=>{
+		res.status(404).send(e);
+	})
+})
+
+
+
+app.patch('/profile', authenticate, (req,res)=>{
+	let id = req.user._id;
+	let body = _.pick(req.body, ['gender', 'telephone', 'address']);
+	console.log(body);
+	
+	User.findOneAndUpdate({
+		_id: id,
+	}, {$set: body}, {new: true, useFindAndModify: false}).then((user)=>{
+		if(!user){
+			return res.status(404).send();
+		};
+		res.send({user});
+	}).catch((e)=>{
+		res.status(400).send();
+	});
+
 });
 
-
 app.get('/test', authenticate, (req, res)=>{
-	res.send('I HAVE A TOKEN');
+	let id = req.user._id;
+
+	User.findOne(id).then((user)=>{
+		if(!user){
+			return res.status(404).send();
+		};
+		console.log(user)
+		res.send({user});
+	}).catch((e)=>{
+		res.status(400).send();
+	})
 });
 
 

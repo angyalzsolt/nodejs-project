@@ -5,9 +5,36 @@
 	<title>Profile</title>
 </head>
 <body>
+	<h1>Profile</h1>
+	<h2>This is your profile</h2>
+	<hr>
+	<h3>Please add more information</h3>
+	<form id="infos" method="post" enctype="multipart/form-data">
+		<label>Hello: </label>
+		<div id="user-name"></div>
+		<label>Email: </label>
+		<div id="email"></div>
+		<label>Gender</label>
+		<select id="gender" name="gender">
+			<option value="Female">Female</option>
+			<option value="male">Male</option>
+		</select>
+		<br>
+		<label>Telelphone Number</label>
+		<input id="telnum" type="text" name="telephone" placeholder="telephone">
+		<br>
+		<label>Address</label>
+		<input id="address" type="text" name="address">
+		<br>
+		<label>Profile Picture</label>
+		<input type="file" name="avatar">
+		<button>Add more infos</button>
+	</form>
 
-<h1>This is your profile</h1>
 
+
+	<script type="text/javascript" src="/js/libs/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="/js/profile.js"></script>
 
 </body>
 </html>

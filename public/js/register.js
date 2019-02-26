@@ -12,7 +12,7 @@ $('#register').on('submit', (e)=> {
 		method: 'POST',
 		data: user
 	}).done((msg)=>{
-		window.location.replace('login.html?success');
+		window.location.replace('login?success');
 	}).fail((msg)=>{
 		console.log('Error', msg.responseText);
 	});
