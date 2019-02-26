@@ -5,11 +5,13 @@ const fs = require('fs');
 const _ = require('lodash');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 const path = require('path');
 
 
 const {db} = require('./db/mongoose');
 const {User} = require('./models/user');
+const {authenticate, loginCheck} = require('./middlewares/authenticate');
 
 const publicPath = path.join(__dirname + '/../public');
 
@@ -24,8 +26,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.static(publicPath));
 app.use(cookieParser());
+
 // Sign up page
-app.get('/register', (req, res)=> {
+app.get('/register', loginCheck, (req, res)=> {
 	res.sendFile(publicPath+'/register.html');
 });
 
@@ -42,7 +45,7 @@ app.post('/register', (req, res)=> {
 });
 
 // Login page
-app.get('/login', (req,res)=> {
+app.get('/login', loginCheck, (req,res)=> {
 	res.sendFile(publicPath+'/login.html');
 });
 
@@ -52,8 +55,7 @@ app.post('/login', (req, res)=>{
 
 	User.findByCredentials(body.email, body.password).then((user)=>{
 		return user.generateAuthToken().then((token)=>{
-			// res.header('x-auth', token).send(user);
-			res.cookie('jwt', token, { httpOnly: true, secure: true }).status(200).send({ user });;
+			res.cookie('jwt', token).status(200).send({ user });
 		})
 	}).catch((e)=>{
 		res.status(400).send(e);
@@ -61,15 +63,30 @@ app.post('/login', (req, res)=>{
 });
 
 
-
-
 // Home page, test for only authorized visitors
-app.get('/home', (req, res)=> {
+app.get('/home',authenticate, (req, res)=> {
+
 	res.sendFile(publicPath+'/home.html');
 })
 
+app.post('/home', (req, res)=>{
+	res.send('THIS IS MY HOME');
+});
 
 
+app.get('/test', authenticate, (req, res)=>{
+	res.send('I HAVE A TOKEN');
+});
+
+
+app.get('/cookie',authenticate, (req, res)=>{
+   
+     req.user.removeToken(req.cookies.jwt).then(()=>{
+     	res.clearCookie('jwt');
+     	res.send('TOKEN REMOVED, BUT COOKIE STILL IN PLACE');
+     }).catch((e)=>{
+     	res.status(400).send(e);
+     })});
 
 
 
