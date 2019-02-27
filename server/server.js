@@ -65,6 +65,10 @@ function checkFileType(file, cb){
 }
 
 
+app.get('/', (req, res)=>{
+	res.redirect('/login');
+})
+
 app.post('/image', authenticate, (req, res)=>{
 	let id = req.user._id;
 	console.log(id);
