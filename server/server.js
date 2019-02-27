@@ -148,7 +148,7 @@ app.post('/login', (req, res)=>{
 
 	User.findByCredentials(body.email, body.password).then((user)=>{
 		return user.generateAuthToken().then((token)=>{
-			res.cookie('jwt', token, {httpOnly: true}).status(200).send({ user });
+			res.cookie('jwt', token, {httpOnly: false}).status(200).send({ user });
 		})
 	}).catch((e)=>{
 		res.status(400).send(e);

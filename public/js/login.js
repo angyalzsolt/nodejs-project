@@ -8,6 +8,7 @@ $('#login').on('submit', (e)=>{
 	$.ajax({
 		url: '/login',
 		method: 'POST',
+		withCredentials: true,
 		data: user
 	}).done((msg)=>{
 		window.location.replace('/home');
