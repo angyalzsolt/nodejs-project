@@ -30,6 +30,8 @@ app.use(cookieParser());
 app.use(express.static('uploads'));
 app.use(express.static('public'));
 
+app.set('trust proxy', 1);
+
 const storage = multer.diskStorage({
 	destination: publicPath + '/../uploads/',
 	filename: function(req, file, cb){
