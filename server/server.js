@@ -31,7 +31,7 @@ app.use(express.static('uploads'));
 app.use(express.static('public'));
 
 app.set('trust proxy', 1);
-app.enable('trust proxy');
+
 
 const storage = multer.diskStorage({
 	destination: publicPath + '/../uploads/',
@@ -155,7 +155,7 @@ app.post('/login', (req, res)=>{
 
 	User.findByCredentials(body.email, body.password).then((user)=>{
 		return user.generateAuthToken().then((token)=>{
-			res.cookie('jwt', token, {domain: 'infinite-hamlet-18142.herokuapp.com'}).status(200).send({ user });
+			res.cookie('jwt', token).status(200).send({ user });
 		})
 	}).catch((e)=>{
 		res.status(400).send(e);
