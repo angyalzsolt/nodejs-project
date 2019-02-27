@@ -25,8 +25,14 @@ $.get('/profile/id', (data)=>{
 	$('#gender').val(data.gender);
 	$('#telnum').val(data.telephone);
 	$('#address').val(data.address);
-	$('#profile-pic').html(`<img src=./${data.image} style="width: 200px" onerror="this.src = '../icon.jpg';">`);
+	genreateDomELements(data);
+	// $('#profile-pic').html(`<img src=./${data.image} style="width: 200px" onerror="this.src = '../icon.jpg';">`);
 });
+
+const genreateDomELements = (data)=>{
+	$('.name').html(`Hey ${data.name}.`);
+	$('#profile-pic').html(`<img class="profile-pic" src=./${data.image} onerror="this.src = '../icon.jpg';">`);
+}
 
 
 $('#images').on('submit', (e)=>{

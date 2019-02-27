@@ -12,6 +12,8 @@ $('#login').on('submit', (e)=>{
 	}).done((msg)=>{
 		window.location.replace('/home');
 	}).fail((msg)=>{
+		$('.error-msg').html('Wrong credentials, try again.');
 		console.log('Error:', msg.responseText);
+
 	});
 })

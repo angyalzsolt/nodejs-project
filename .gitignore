@@ -1,4 +1,5 @@
 node_modules/
 package-lock.json
 server/config/config.json
+# folder for the images, create in the root
 uploads/

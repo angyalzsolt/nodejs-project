@@ -2,26 +2,49 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>{{pageTitle}}</title>
+	<title>register</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="/styles/styles.css">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 </head>
 <body>
+<div class="container">
+	<h1 class="title">Sign up here</h1>
 
-	<h1>Sign up here</h1>
+		<div class="login-box">
+			<div class="form">
+				<form id="register">
+
+					<p class="input-names">Name</p>
+					<input class="input" type="text" name="name">
+	
+					<p class="input-names">Email</p>
+					<input class="input" type="text" name="email">
+
+					<p class="input-names">Password</p>
+					<input class="input" type="password" name="password">
+					<p class="error-msg"></p>
+					<div class="sign-field">
+						<div>
+							<button class="button">Sign Up</button>
+						</div>
+						<div>
+							<a href="/login" title="">Go back, and sign in</a>
+						</div>
+						
+					</div>
+					
+				</form>
+
+			</div>
+			
+		</div>
+
+</div>
+
+	
 		
-<form id="register">
 
-	<label>Name</label>
-	<input type="text" name="name">
-	<hr>
-	<label>Email</label>
-	<input type="text" name="email">
-	<hr>
-	<label>Password</label>
-	<input type="password" name="password">
-	<hr>
-	<button>Sign Up</button>
-
-</form>
 
 <script type="text/javascript" src="/js/libs/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/js/register.js"></script>

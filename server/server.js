@@ -28,6 +28,7 @@ app.use(express.static(publicPath));
 app.use(cookieParser());
 
 app.use(express.static('uploads'));
+app.use(express.static('public'));
 
 const storage = multer.diskStorage({
 	destination: publicPath + '/../uploads/',
@@ -65,8 +66,8 @@ app.post('/image', authenticate, (req, res)=>{
 	let id = req.user._id;
 	console.log(id);
 	upload(req, res, (err)=>{
-		console.log(req.file);
-		console.log(id);
+		// console.log(req.file);
+		// console.log(id);
 		if(err){
 			res.status(401).send(err);
 		} else {
@@ -188,7 +189,7 @@ app.get('/profile/id', authenticate, (req, res)=>{
 app.patch('/profile', authenticate, (req,res)=>{
 	let id = req.user._id;
 	let body = _.pick(req.body, ['gender', 'telephone', 'address']);
-	console.log(body);
+	// console.log(body);
 	
 	User.findOneAndUpdate({
 		_id: id,

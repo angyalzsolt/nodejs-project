@@ -3,19 +3,45 @@
 <head>
 	<meta charset="utf-8">
 	<title>Login</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="/styles/styles.css">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 </head>
 <body>
-<h1>Welcome</h1>
+	<div class="container">
 
-<form id="login">
-	<label>Email</label>
-	<input type="text" name="email" placeholder="Email" autocomplete="off">
-	<hr>
-	<label>Password</label>
-	<input type="password" name="password" placeholder="Password">
-	<hr>
-	<button>Log In</button>
-</form>
+
+		<h1 class="title">Welcome</h1>
+
+	<div class="login-box">
+		<div class="form">
+			<form id="login">
+
+				<p class="input-names">Email</p>
+				<input class="input" type="text" name="email" placeholder="Email" autocomplete="off">
+
+				<p class="input-names">Password</p>
+				<input class="input" type="password" name="password" placeholder="Password">
+				<p class="error-msg"></p>
+				<div class="sign-field">
+					<div>
+						<button class="button">Log In</button>
+					</div>
+					<div>
+						<a href="/register">Don't have an account? Sign up here.</a>	
+					</div>
+					
+				</div>
+				
+			</form>
+		</div>
+
+	</div>
+
+
+
+	</div>
+
 
 
 

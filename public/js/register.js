@@ -14,6 +14,7 @@ $('#register').on('submit', (e)=> {
 	}).done((msg)=>{
 		window.location.replace('login?success');
 	}).fail((msg)=>{
+		$('.error-msg').html('Wrong credentials, try again.');
 		console.log('Error', msg.responseText);
 	});
 
