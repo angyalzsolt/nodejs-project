@@ -1,14 +1,10 @@
 require('./config/config');
 const express = require('express');
-const hbs = require('hbs');
 const fs = require('fs');
 const _ = require('lodash');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const cookieSession = require('cookie-session');
 const path = require('path');
-
-
 const multer = require('multer');
 
 const {db} = require('./db/mongoose');
@@ -25,10 +21,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.static(publicPath));
-app.use(cookieParser());
-
 app.use(express.static('uploads'));
 app.use(express.static('public'));
+
+
+app.use(cookieParser());
 
 app.set('trust proxy', 1);
 
@@ -73,8 +70,6 @@ app.post('/image', authenticate, (req, res)=>{
 	let id = req.user._id;
 	console.log(id);
 	upload(req, res, (err)=>{
-		// console.log(req.file);
-		// console.log(id);
 		if(err){
 			res.status(401).send(err);
 		} else {
@@ -95,12 +90,10 @@ app.post('/image', authenticate, (req, res)=>{
 
 app.patch('/image', authenticate, (req, res)=>{
 
-	// let img = req.body.title;
-	// res.send(console.log(img));
 	let img = req.body.title;
 
 	fs.stat(publicPath + './../uploads/'+img, function (err, stats) {
-   console.log(stats);//here we got all information of file in stats variable
+   		console.log(stats);
 
 	   if (err) {
 	       return console.error(err);
@@ -110,7 +103,7 @@ app.patch('/image', authenticate, (req, res)=>{
 	        if(err) return console.log(err);
 	        console.log('file deleted successfully');
 	   });  
-});
+	});
 
 
 	let id = req.user._id;
@@ -155,7 +148,7 @@ app.post('/login', (req, res)=>{
 
 	User.findByCredentials(body.email, body.password).then((user)=>{
 		return user.generateAuthToken().then((token)=>{
-			res.cookie('jwt', token).status(200).send({ user });
+			res.cookie('jwt', token, {httpOnly: true}).status(200).send({ user });
 		})
 	}).catch((e)=>{
 		res.status(400).send(e);
